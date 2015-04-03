@@ -1,0 +1,12 @@
+apply plugin: "java"
+
+repositories {
+    maven {
+        name "Bukkit Repo"
+        url "http://repo.bukkit.org/content/groups/public/"
+    }
+}
+
+dependencies {
+    compile "org.bukkit:bukkit:1.2.5-R5.0"
+}

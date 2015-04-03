@@ -1,0 +1,7 @@
+name: WarPlugin
+main: com.gitlab.zachdeibert.WarPlugin.WarPlugin
+version: 1.0
+website: https://gitlab.com/zachdeibert/WarPlugin
+description: A plugin that allows you to have awesome Minecraft wars!
+authors:
+ - Zach Deibert
