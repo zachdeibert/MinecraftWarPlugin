@@ -1,5 +1,6 @@
 package com.gitlab.zachdeibert.WarPlugin;
 
+import java.io.File;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -98,31 +99,41 @@ public class WarPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        state |= IS_ENABLED;
-        final Server server = getServer();
-        final World world = server.getWorlds().get(0);
-        final PluginManager pluginManager = server.getPluginManager();
-        final FileConfiguration config = getConfig();
-        config.options().copyDefaults(true);
-        config.addDefault("Healing.Cooldown", 60000);
-        config.addDefault("War.Start.Countdown.Seconds", 10);
-        config.addDefault("Apocalypse.Enable", false);
-        healer = new Healer(config.getInt("Healing.Cooldown"));
-        inv = new StartingInventory(config, "War.Start.Inventory");
-        tper = new SpawnTeleporter(world);
-        tper.load(config, "War.Start.Teleporting");
-        sphere = new SpawnSphere(this);
-        sphere.load(config, "War.Spawn.Sphere");
-        final WarEnder ender = new WarEnder(server);
-        ender.load(config, "War.Winning");
-        SpawnEggHandler.setup(server, config, "Monsters.Eggs");
-        ExpHandler.setup(server, config, "Exp");
-        saveConfig();
-        pluginManager.registerEvents(freezer, this);
-        pluginManager.registerEvents(ender, this);
-        if ( config.getBoolean("Apocalypse.Enable") ) {
-            final ZombieApocalypseMode apocalypse = new ZombieApocalypseMode();
-            pluginManager.registerEvents(apocalypse, this);
+        try {
+            ItemDeserializer.init();
+            final Server server = getServer();
+            final World world = server.getWorlds().get(0);
+            final PluginManager pluginManager = server.getPluginManager();
+            final FileConfiguration config = getConfig();
+            final File dataFolder = getDataFolder();
+            config.options().copyDefaults(true);
+            config.addDefault("Healing.Cooldown", 60000);
+            config.addDefault("War.Start.Countdown.Seconds", 10);
+            config.addDefault("Apocalypse.Enable", false);
+            healer = new Healer(config.getInt("Healing.Cooldown"));
+            inv = new StartingInventory(config, "War.Start.Inventory");
+            tper = new SpawnTeleporter(world);
+            tper.load(config, "War.Start.Teleporting");
+            sphere = new SpawnSphere(this);
+            sphere.load(config, "War.Spawn.Sphere");
+            final WarEnder ender = new WarEnder(server);
+            ender.load(config, "War.Winning");
+            final StatisticsHandler stats = new StatisticsHandler();
+            stats.load(dataFolder);
+            SpawnEggHandler.setup(server, config, "Monsters.Eggs");
+            ExpHandler.setup(server, config, "Exp");
+            saveConfig();
+            pluginManager.registerEvents(freezer, this);
+            pluginManager.registerEvents(ender, this);
+            pluginManager.registerEvents(stats, this);
+            if ( config.getBoolean("Apocalypse.Enable") ) {
+                final ZombieApocalypseMode apocalypse = new ZombieApocalypseMode();
+                pluginManager.registerEvents(apocalypse, this);
+            }
+        } catch ( Exception ex ) {
+            ex.printStackTrace();
+        } finally {
+            state |= IS_ENABLED;
         }
     }
 
