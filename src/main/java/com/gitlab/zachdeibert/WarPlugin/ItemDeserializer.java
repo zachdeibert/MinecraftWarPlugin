@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemDeserializer extends ItemStack implements ConfigurationSerializable {
     public static void init() {
-        System.out.println(ItemDeserializer.class);
         ConfigurationSerialization.registerClass(ItemDeserializer.class);
     }
     
