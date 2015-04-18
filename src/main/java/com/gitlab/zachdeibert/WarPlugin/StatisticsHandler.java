@@ -15,6 +15,9 @@ public class StatisticsHandler implements Listener {
     
     public void load(File dir) throws IOException {
         try {
+            if ( !dir.exists() ) {
+                dir.mkdirs();
+            }
             databaseFile = new File(dir, "statistics.yml");
             if ( !databaseFile.exists() ) {
                 databaseFile.createNewFile();
