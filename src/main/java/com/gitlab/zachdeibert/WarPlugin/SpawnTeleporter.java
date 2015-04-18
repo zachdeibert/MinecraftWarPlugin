@@ -33,9 +33,16 @@ public class SpawnTeleporter {
             final double sin = Math.sin(θ);
             final double cos = Math.cos(θ);
             for ( double b = nhWidth; b < hWidth; b++ ) {
+                final double radiusPB = radius + b;
+                final int x = (int) (cos * radiusPB) + this.x;
+                final int z = (int) (sin * radiusPB) + this.z;
                 for ( int i = 0; i < height; i++ ) {
-                    final Block block = world.getBlockAt((int) (cos * (radius + b)) + x, y + i, (int) (sin * (radius + b)) + z);
+                    final Block block = world.getBlockAt(x, y + i, z);
                     block.setType(Material.AIR);
+                }
+                final Block block = world.getBlockAt(x, y - 1, z);
+                if ( block.getType() == Material.AIR ) {
+                    block.setType(Material.STONE);
                 }
             }
         }
