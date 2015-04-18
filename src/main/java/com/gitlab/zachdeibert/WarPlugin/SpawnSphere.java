@@ -64,6 +64,7 @@ public class SpawnSphere extends SynchronizedRunnable {
             blocks.add(new Location(world, x, y - radius + 1, z));
             blocks.add(new Location(world, x, y, z + radius - 1));
             blocks.add(new Location(world, x, y, z - radius + 1));
+            blocks.add(new Location(world, x, y - 1, z));
             final List<Location> filteredBlocks = new LinkedList<Location>();
             for ( final Location loc : blocks ) {
                 if ( !filteredBlocks.contains(loc) ) {
