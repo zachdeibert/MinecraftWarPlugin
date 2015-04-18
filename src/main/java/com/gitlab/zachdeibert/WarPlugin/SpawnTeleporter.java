@@ -54,7 +54,7 @@ public class SpawnTeleporter {
     }
     
     public void load(final FileConfiguration config, final String prefix) {
-        config.addDefault(prefix.concat(".Radius"), 19.0);
+        config.addDefault(prefix.concat(".Radius"), 20.0);
         config.addDefault(prefix.concat(".Width"), 4);
         config.addDefault(prefix.concat(".Height"), 3);
         setRadius(config.getDouble(prefix.concat(".Radius")));
