@@ -61,7 +61,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
             stack.setTypeId((int) args.get("id"));
         }
         if ( args.containsKey("damage") ) {
-            stack.setDurability((short) args.get("damage"));
+            stack.setDurability((short) (int) args.get("damage"));
         }
         if ( args.containsKey("amount") ) {
             stack.setAmount((int) args.get("amount"));
