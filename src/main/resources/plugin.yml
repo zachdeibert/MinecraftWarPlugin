@@ -5,3 +5,19 @@ website: https://gitlab.com/zachdeibert/WarPlugin
 description: A plugin that allows you to have awesome Minecraft wars!
 authors:
  - Zach Deibert
+commands:
+    startWar:
+        description: Starts the war
+        usage: /startWar
+    freezePlayers:
+        description: Freezes all the players
+        usage: /freezePlayers
+    thawPlayers:
+        description: Un-freezes all the players
+        usage: /thawPlayers
+    generateSpawnSphere:
+        description: Generates a sphere around spawn
+        usage: /generateSpawnSphere
+    heal:
+        description: Heals a player
+        usage: /heal
