@@ -267,7 +267,8 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
                     break;
                 }
             }
-            if ( !data.containsKey("type") ) {
+            if ( !data.containsKey("type") || ((String) data.get("type")).matches("X[0-9]+") ) {
+                data.remove("type");
                 data.put("id", typeId);
             }
         }
