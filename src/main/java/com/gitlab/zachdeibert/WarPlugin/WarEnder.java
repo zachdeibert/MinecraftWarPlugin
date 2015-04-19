@@ -27,7 +27,7 @@ public class WarEnder implements Listener {
                 final int y = loc.getBlockY() - this.y;
                 final int z = loc.getBlockZ() - this.z;
                 final double radius = Math.sqrt(x * x + y * y + z * z);
-                if ( radius <= this.radius ) {
+                if ( radius >= this.radius ) {
                     if ( winner == null ) {
                         winner = player;
                     } else {
