@@ -34,7 +34,7 @@ public class SpawnTeleporter {
         for ( double θ = 0.0; θ < Util.τ; θ += 0.01 ) {
             final double sin = Math.sin(θ);
             final double cos = Math.cos(θ);
-            for ( double b = nhWidth; b < hWidth; b++ ) {
+            for ( double b = nhWidth; b <= hWidth; b++ ) {
                 final double radiusPB = radius + b;
                 final int x = (int) (cos * radiusPB) + this.x;
                 final int z = (int) (sin * radiusPB) + this.z;
