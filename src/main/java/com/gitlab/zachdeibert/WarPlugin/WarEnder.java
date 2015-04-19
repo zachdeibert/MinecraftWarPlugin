@@ -15,11 +15,12 @@ public class WarEnder implements Listener {
     private final int z;
     private final Runnable onWin;
     private int radius;
+    public boolean warStarted = false;
     
     @EventHandler
     public void onPlayerDeath(final PlayerDeathEvent event) {
         final Player players[] = server.getOnlinePlayers();
-        if ( players.length > 1 ) {
+        if ( warStarted && players.length > 1 ) {
             Player winner = null;
             for ( final Player player : players ) {
                 final Location loc = player.getLocation();

@@ -19,6 +19,7 @@ public class WarPlugin extends JavaPlugin {
     private byte state;
     private final PlayerFreezer freezer = new PlayerFreezer();
     private WarStarter war;
+    private WarEnder ender;
     private StartingInventory inv;
     private SpawnTeleporter tper;
     private Healer healer;
@@ -63,6 +64,7 @@ public class WarPlugin extends JavaPlugin {
                                 @Override
                                 public void run() {
                                     freezer.disable();
+                                    ender.warStarted = true;
                                     state ^= PLAYERS_ARE_FROZEN;
                                 }
                             }, getConfig().getInt("War.Start.Countdown.Seconds") * 20);
@@ -122,7 +124,7 @@ public class WarPlugin extends JavaPlugin {
             tper.load(config, "War.Start.Teleporting");
             sphere = new SpawnSphere(this);
             sphere.load(config, "War.Spawn.Sphere");
-            final WarEnder ender = new WarEnder(server);
+            ender = new WarEnder(server);
             ender.load(config, "War.Winning");
             final StatisticsHandler stats = new StatisticsHandler();
             stats.load(dataFolder);
