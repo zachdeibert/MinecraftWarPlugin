@@ -21,3 +21,6 @@ commands:
     heal:
         description: Heals a player
         usage: /heal
+    clearLag:
+        description: Clears some lag
+        usage: /clearLag

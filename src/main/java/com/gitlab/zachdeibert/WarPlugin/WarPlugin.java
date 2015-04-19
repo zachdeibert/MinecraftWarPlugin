@@ -1,12 +1,14 @@
 package com.gitlab.zachdeibert.WarPlugin;
 
 import java.io.File;
+import net.minecraft.server.Item;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -76,6 +78,12 @@ public class WarPlugin extends JavaPlugin {
                     }
                 } else if ( name.equalsIgnoreCase("generateSpawnSphere") ) {
                     sphere.generate();
+                } else if ( name.equalsIgnoreCase("clearLag") ) {
+                    for ( World world : getServer().getWorlds() ) {
+                        for ( Entity entity : world.getEntitiesByClasses(Item.class) ) {
+                            entity.remove();
+                        }
+                    }
                 } else {
                     return false;
                 }
