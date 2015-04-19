@@ -1,8 +1,10 @@
 package com.gitlab.zachdeibert.WarPlugin;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -34,6 +36,13 @@ public class PlayerFreezer implements Listener {
             from.setPitch(to.getPitch());
             from.setYaw(to.getYaw());
             event.setTo(from);
+        }
+    }
+    
+    @EventHandler
+    public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
+        if ( enabled && event.getDamager() instanceof Player ) {
+            event.setCancelled(true);
         }
     }
     
