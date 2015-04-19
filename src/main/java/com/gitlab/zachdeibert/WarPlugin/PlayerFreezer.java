@@ -41,7 +41,7 @@ public class PlayerFreezer implements Listener {
     
     @EventHandler
     public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
-        if ( enabled && event.getDamager() instanceof Player ) {
+        if ( enabled && event.getEntity() instanceof Player ) {
             event.setCancelled(true);
         }
     }
