@@ -44,7 +44,6 @@ public class WarStarter extends SynchronizedRunnable {
     
     public void start() {
         state = State.COUNTDOWN;
-        tper.clearArea();
     }
     
     public WarStarter(final Plugin plugin, final BukkitScheduler scheduler, final StartingInventory inv, final SpawnTeleporter tper, final int count) {
@@ -53,5 +52,6 @@ public class WarStarter extends SynchronizedRunnable {
         this.inv = inv;
         this.tper = tper;
         state = State.TPING;
+        tper.clearArea();
     }
 }
