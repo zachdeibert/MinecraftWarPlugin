@@ -49,6 +49,9 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
                 enchData.put("level", level);
             }
         }
+        if ( enchsData.size() > 0 ) {
+            data.put("enchantments", enchsData);
+        }
         return data;
     }
     
@@ -72,10 +75,22 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
             for ( final Map<String, Object> enchantment : enchantments ) {
                 Enchantment ench = null;
                 if ( enchantment.containsKey("name") ) {
-                    ench = Enchantment.getByName((String) enchantment.get("name"));
+                    final String name = (String) enchantment.get("name");
+                    if ( name != null ) {
+                        final Enchantment e = Enchantment.getByName(name);
+                        if ( e != null ) {
+                            ench = e;
+                        }
+                    }
                 }
                 if ( enchantment.containsKey("id") ) {
-                    ench = Enchantment.getById((int) enchantment.get("id"));
+                    final Integer id = (Integer) enchantment.get("id");
+                    if ( id != null ) {
+                        final Enchantment e = Enchantment.getById(id);
+                        if ( e != null ) {
+                            ench = e;
+                        }
+                    }
                 }
                 if ( ench != null ) {
                     int level = 1;
