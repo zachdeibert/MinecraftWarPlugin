@@ -16,7 +16,8 @@ public class StartingInventory {
     private static final ItemStack DEFAULT_SWORD = new ItemStack(Material.DIAMOND_SWORD);
     private final int health;
     private final int food;
-    private final int exp;
+    private final int expLevel;
+    private final float exp;
     private final ItemStack helmet;
     private final ItemStack chestplate;
     private final ItemStack leggings;
@@ -26,7 +27,10 @@ public class StartingInventory {
     public void giveTo(final Player player) {
         player.setHealth(health);
         player.setFoodLevel(food);
-        player.setTotalExperience(exp);
+        final int startingExp = player.getTotalExperience();
+        player.setLevel(expLevel);
+        player.setExp(exp);
+        player.setTotalExperience(startingExp + player.getTotalExperience());
         final PlayerInventory inv = player.getInventory();
         if ( inv.getHelmet() == null ) {
             inv.setHelmet(helmet);
@@ -56,14 +60,16 @@ public class StartingInventory {
     public StartingInventory(final FileConfiguration config, final String prefix) {
         config.addDefault(prefix.concat(".Attributes.Health"), 20);
         config.addDefault(prefix.concat(".Attributes.Food"), 20);
-        config.addDefault(prefix.concat(".Attributes.XP"), 0);
+        config.addDefault(prefix.concat(".Attributes.XP.Level"), 0);
+        config.addDefault(prefix.concat(".Attributes.XP.XP"), 0.0);
         config.addDefault(prefix.concat(".Armor.Helmet"), DEFAULT_HELMET);
         config.addDefault(prefix.concat(".Armor.Chestplate"), DEFAULT_CHESTPLATE);
         config.addDefault(prefix.concat(".Armor.Leggings"), DEFAULT_LEGGINGS);
         config.addDefault(prefix.concat(".Armor.Boots"), DEFAULT_BOOTS);
         health = config.getInt(prefix.concat(".Attributes.Health"));
         food = config.getInt(prefix.concat(".Attributes.Food"));
-        exp = config.getInt(prefix.concat(".Attributes.XP"));
+        expLevel = config.getInt(prefix.concat(".Attributes.XP.Level"));
+        exp = (float) config.getDouble(prefix.concat(".Attributes.XP.XP"));
         helmet = config.getItemStack(prefix.concat(".Armor.Helmet"));
         chestplate = config.getItemStack(prefix.concat(".Armor.Chestplate"));
         leggings = config.getItemStack(prefix.concat(".Armor.Leggings"));
