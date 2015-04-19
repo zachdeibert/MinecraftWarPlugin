@@ -21,9 +21,11 @@ public class SpawnTeleporter {
     
     public void teleportPlayer(final Player p) {
         final double θ = Util.τ * random.nextDouble();
-        final double x = radius * Math.cos(θ) + this.x;
-        final double z = radius * Math.sin(θ) + this.z;
-        p.teleport(new Location(world, x, y, z));
+        final Location loc = p.getLocation();
+        loc.setX(radius * Math.cos(θ) + x);
+        loc.setY(y);
+        loc.setZ(radius * Math.sin(θ) + z);
+        p.teleport(loc);
     }
     
     public void clearArea() {
