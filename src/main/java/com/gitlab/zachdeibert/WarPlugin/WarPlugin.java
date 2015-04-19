@@ -106,10 +106,16 @@ public class WarPlugin extends JavaPlugin {
             final PluginManager pluginManager = server.getPluginManager();
             final FileConfiguration config = getConfig();
             final File dataFolder = getDataFolder();
+            if ( config.getBoolean("General.Reset", false) ) {
+                new File(dataFolder, "config.yml").renameTo(new File(dataFolder, "config.yml.bk"));
+                reloadConfig();
+            }
             config.options().copyDefaults(true);
             config.addDefault("Healing.Cooldown", 60000);
             config.addDefault("War.Start.Countdown.Seconds", 10);
             config.addDefault("Apocalypse.Enable", false);
+            config.addDefault("General.Lock", false);
+            config.addDefault("General.Reset", false);
             healer = new Healer(config.getInt("Healing.Cooldown"));
             inv = new StartingInventory(config, "War.Start.Inventory");
             tper = new SpawnTeleporter(world);
@@ -122,7 +128,9 @@ public class WarPlugin extends JavaPlugin {
             stats.load(dataFolder);
             SpawnEggHandler.setup(server, config, "Monsters.Eggs");
             ExpHandler.setup(server, config, "Exp");
-            saveConfig();
+            if ( !config.getBoolean("General.Lock") ) {
+                saveConfig();
+            }
             pluginManager.registerEvents(freezer, this);
             pluginManager.registerEvents(ender, this);
             pluginManager.registerEvents(stats, this);
