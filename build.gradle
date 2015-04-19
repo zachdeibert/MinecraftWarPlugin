@@ -9,4 +9,5 @@ repositories {
 
 dependencies {
     compile "org.bukkit:bukkit:1.2.5-R5.0"
+    compile "org.bukkit:minecraft-server:1.2.5"
 }
