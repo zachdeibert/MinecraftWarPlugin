@@ -138,12 +138,15 @@ public class WarPlugin extends JavaPlugin {
             stats.load(dataFolder);
             SpawnEggHandler.setup(server, config, "Monsters.Eggs");
             ExpHandler.setup(server, config, "Exp");
+            final DeathHandler deaths = new DeathHandler();
+            deaths.load(config, "Deaths");
             if ( !config.getBoolean("General.Lock") ) {
                 saveConfig();
             }
             pluginManager.registerEvents(freezer, this);
             pluginManager.registerEvents(ender, this);
             pluginManager.registerEvents(stats, this);
+            pluginManager.registerEvents(deaths, this);
             if ( config.getBoolean("Apocalypse.Enable") ) {
                 final ZombieApocalypseMode apocalypse = new ZombieApocalypseMode();
                 pluginManager.registerEvents(apocalypse, this);
