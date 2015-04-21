@@ -37,7 +37,7 @@ public class StatisticsHandler implements Listener {
         final int deaths = database.getInt(name, 0) + 1;
         database.set(name, deaths);
         database.save(databaseFile);
-        final String deathMessage = String.format("%s (Death #%d)", event.getDeathMessage(), deaths);
+        final String deathMessage = String.format("%s [Death #%d]", event.getDeathMessage(), deaths);
         event.setDeathMessage(deathMessage);
     }
 }
