@@ -39,6 +39,7 @@ public class WarEnder implements Listener {
             if ( winner != null ) {
                 Util.broadcastMessage("§2The war has ended!§r");
                 Util.broadcastMessage(String.format("§2%s has won the war!§r", winner.getName()));
+                warStarted = false;
                 if ( onWin != null ) {
                     onWin.run();
                 }
