@@ -3,7 +3,6 @@ package com.gitlab.zachdeibert.WarPlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
@@ -21,7 +20,7 @@ public class ZombieApocalypseMode implements Listener {
             if ( parent.getHealth() > event.getDamage() ) {
                 final Location loc = parent.getLocation();
                 final World world = loc.getWorld();
-                final Zombie child = (Zombie) world.spawnEntity(loc, EntityType.ZOMBIE);
+                final Zombie child = (Zombie) world.spawnEntity(loc, parent.getType());
                 for ( final PotionEffect potion : parent.getActivePotionEffects() ) {
                     child.addPotionEffect(potion);
                 }
