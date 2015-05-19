@@ -24,3 +24,6 @@ commands:
     clearLag:
         description: Clears some lag
         usage: /clearLag
+    giveStartingInventory:
+        description: Gives the starting inventory to a player
+        usage: /giveStartingInventory [player]

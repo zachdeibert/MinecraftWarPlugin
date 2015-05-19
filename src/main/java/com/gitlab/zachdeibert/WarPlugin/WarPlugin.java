@@ -84,6 +84,9 @@ public class WarPlugin extends JavaPlugin {
                             entity.remove();
                         }
                     }
+                } else if ( name.equalsIgnoreCase("giveStartingInventory") ) {
+                    final Player player = getServer().getPlayer(args[0]);
+                    inv.giveTo(player);
                 } else {
                     return false;
                 }
