@@ -22,11 +22,14 @@ public class SpawnSphere extends SynchronizedRunnable {
     private int radius;
     private int typeId;
     private int timeout;
+    private boolean displayMessage;
     private boolean running;
     
     public void generate() {
-        Util.broadcastMessage("§bRegenerating Spawn Sphere§r");
-        for ( Location loc : sphereBlocks ) {
+        if ( displayMessage ) {
+            Util.broadcastMessage("§bRegenerating Spawn Sphere§r");
+        }
+        for ( final Location loc : sphereBlocks ) {
             final Block block = world.getBlockAt(loc);
             block.setTypeId(typeId);
         }
@@ -113,6 +116,10 @@ public class SpawnSphere extends SynchronizedRunnable {
         timeout = ticks;
     }
     
+    public void setDisplayMessage(final boolean display) {
+        displayMessage = display;
+    }
+    
     public void load(final FileConfiguration config, final String prefix) {
         final Server server = plugin.getServer();
         config.addDefault(prefix.concat(".World"), 0);
@@ -120,10 +127,12 @@ public class SpawnSphere extends SynchronizedRunnable {
         config.addDefault(prefix.concat(".Block"), DEFAULT_TYPE);
         config.addDefault(prefix.concat(".Regeneration.Time"), 1200);
         config.addDefault(prefix.concat(".Regeneration.Automatic"), true);
+        config.addDefault(prefix.concat(".Regeneration.Message"), true);
         setRadius(config.getInt(prefix.concat(".Radius")));
         setType(config.getItemStack(prefix.concat(".Block")));
         setTimeout(config.getInt(prefix.concat(".Regeneration.Time")));
         setCycling(config.getBoolean(prefix.concat(".Regeneration.Automatic")));
+        setDisplayMessage(config.getBoolean(prefix.concat(".Regeneration.Message")));
         final Object world = config.get(prefix.concat(".World"));
         if ( world instanceof Integer ) {
             setCenter(server.getWorlds().get((int) world));
