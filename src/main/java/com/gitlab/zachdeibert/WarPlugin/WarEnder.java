@@ -1,8 +1,12 @@
 package com.gitlab.zachdeibert.WarPlugin;
 
+import java.io.File;
+import java.io.IOException;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +24,7 @@ public class WarEnder implements Listener {
     @EventHandler
     public void onPlayerDeath(final PlayerDeathEvent event) {
         final Player players[] = server.getOnlinePlayers();
-        if ( warStarted && players.length > 1 ) {
+        if ( warStarted && players.length > 2 ) {
             Player winner = null;
             for ( final Player player : players ) {
                 final Location loc = player.getLocation();
@@ -51,9 +55,44 @@ public class WarEnder implements Listener {
         this.radius = radius;
     }
     
-    public void load(final FileConfiguration config, final String prefix) {
+    public void load(final FileConfiguration config, final String prefix, final File dataFolder) {
         config.addDefault(prefix.concat(".Radius"), 32);
         setRadius(config.getInt(prefix.concat(".Radius")));
+        try {
+            if ( !dataFolder.exists() ) {
+                dataFolder.mkdirs();
+            }
+            final File stateFile = new File(dataFolder, "state.yml");
+            if ( !stateFile.exists() ) {
+                stateFile.createNewFile();
+            }
+            final YamlConfiguration state = new YamlConfiguration();
+            state.load(stateFile);
+            state.options().copyDefaults(true);
+            state.addDefault("war.started", false);
+            warStarted = state.getBoolean("war.started");
+            state.save(stateFile);
+        } catch ( final IOException|InvalidConfigurationException ex ) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void save(final File dataFolder) {
+        try {
+            if ( !dataFolder.exists() ) {
+                dataFolder.mkdirs();
+            }
+            final File stateFile = new File(dataFolder, "state.yml");
+            if ( !stateFile.exists() ) {
+                stateFile.createNewFile();
+            }
+            final YamlConfiguration state = new YamlConfiguration();
+            state.load(stateFile);
+            state.set("war.started", warStarted);
+            state.save(stateFile);
+        } catch ( final IOException|InvalidConfigurationException ex ) {
+            ex.printStackTrace();
+        }
     }
     
     public WarEnder(final Server server, final Runnable callback) {

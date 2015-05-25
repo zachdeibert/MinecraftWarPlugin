@@ -108,6 +108,8 @@ public class WarPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         state ^= IS_ENABLED;
+        final File dataFolder = getDataFolder();
+        ender.save(dataFolder);
     }
 
     @Override
@@ -136,7 +138,7 @@ public class WarPlugin extends JavaPlugin {
             sphere = new SpawnSphere(this);
             sphere.load(config, "War.Spawn.Sphere");
             ender = new WarEnder(server);
-            ender.load(config, "War.Winning");
+            ender.load(config, "War.Winning", dataFolder);
             final StatisticsHandler stats = new StatisticsHandler();
             stats.load(dataFolder);
             SpawnEggHandler.setup(server, config, "Monsters.Eggs");
