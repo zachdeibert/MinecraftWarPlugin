@@ -25,7 +25,13 @@ public class ZombieApocalypseMode implements Listener {
                     child.addPotionEffect(potion);
                 }
                 child.setHealth(parent.getHealth() - event.getDamage());
-                child.setTarget(parent.getTarget());
+                final Player player;
+                if ( damager instanceof Projectile ) {
+                    player = (Player) ((Projectile) damager).getShooter();
+                } else {
+                    player = (Player) damager;
+                }
+                child.setTarget(player);
                 child.setVelocity(parent.getVelocity());
             }
         }
