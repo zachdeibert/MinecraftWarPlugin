@@ -144,7 +144,6 @@ public class WarPlugin extends JavaPlugin {
             ender = new WarEnder(server);
             ender.load(config, "War.Winning", dataFolder);
             final StatisticsHandler stats = new StatisticsHandler();
-            stats.load(dataFolder);
             SpawnEggHandler.setup(server, config, "Monsters.Eggs");
             ExpHandler.setup(server, config, "Exp");
             final DeathHandler deaths = new DeathHandler();
