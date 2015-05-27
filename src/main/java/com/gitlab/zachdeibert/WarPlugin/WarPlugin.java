@@ -1,7 +1,6 @@
 package com.gitlab.zachdeibert.WarPlugin;
 
 import java.io.File;
-import net.minecraft.server.Item;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -9,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,11 +26,6 @@ public class WarPlugin extends JavaPlugin {
     private SpawnTeleporter tper;
     private Healer healer;
     private SpawnSphere sphere;
-    
-    @Override
-    public boolean isInitialized() {
-        return (state & IS_LOADED) != 0;
-    }
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
@@ -156,7 +151,7 @@ public class WarPlugin extends JavaPlugin {
                 final ZombieApocalypseMode apocalypse = new ZombieApocalypseMode();
                 pluginManager.registerEvents(apocalypse, this);
             }
-        } catch ( Exception ex ) {
+        } catch ( final Exception ex ) {
             ex.printStackTrace();
         } finally {
             state |= IS_ENABLED;
