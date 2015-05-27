@@ -43,7 +43,7 @@ public class SpawnTeleporter {
                     block.setType(Material.AIR);
                 }
                 final Block block = world.getBlockAt(x, y - 1, z);
-                if ( !net.minecraft.server.Block.byId[block.getTypeId()].material.isSolid() ) {
+                if ( !block.getType().isSolid() ) {
                     block.setType(Material.STONE);
                 }
             }

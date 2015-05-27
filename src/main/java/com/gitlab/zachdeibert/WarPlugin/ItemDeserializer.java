@@ -31,7 +31,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
         ConfigurationSerialization.registerClass(ItemDeserializer.class);
     }
     
-    public static NBTTagCompound getNBT(ItemStack stack) throws ReflectiveOperationException {
+    public static NBTTagCompound getNBT(final ItemStack stack) throws ReflectiveOperationException {
         final Class<?> cls = stack.getClass();
         if ( cls.getName().equals("org.bukkit.craftbukkit.inventory.CraftItemStack") ) {
             final Field itemF = cls.getDeclaredField("item");
@@ -46,7 +46,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
         }
     }
     
-    public static ItemStack setNBT(ItemStack stack, NBTTagCompound nbt) throws ReflectiveOperationException {
+    public static ItemStack setNBT(final ItemStack stack, final NBTTagCompound nbt) throws ReflectiveOperationException {
         final Class<?> cls = stack.getClass();
         if ( cls.getName().equals("org.bukkit.craftbukkit.inventory.CraftItemStack") ) {
             final Field itemF = cls.getDeclaredField("item");
@@ -63,8 +63,8 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
     }
     
     @SuppressWarnings("unchecked")
-    public static NBTTagCompound removeTag(NBTTagCompound nbt, String tag) throws ReflectiveOperationException {
-        final Field field = nbt.getClass().getDeclaredField("map");
+    public static NBTTagCompound removeTag(final NBTTagCompound nbt, final String tag) throws ReflectiveOperationException {
+        final Field field = nbt.getClass().getDeclaredField("c");
         field.setAccessible(true);
         ((Map<String, Object>) field.get(nbt)).remove(tag);
         return nbt;
@@ -72,28 +72,28 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
     
     public static void serializeNBT(final NBTBase tag, final StringBuilder builder) throws ReflectiveOperationException {
         if ( tag instanceof NBTTagByte ) {
-            builder.append(((NBTTagByte) tag).data);
+            builder.append(((NBTTagByte) tag).f());
             builder.append("b");
         } else if ( tag instanceof NBTTagShort ) {
-            builder.append(((NBTTagShort) tag).data);
+            builder.append(((NBTTagShort) tag).e());
             builder.append("s");
         } else if ( tag instanceof NBTTagInt ) {
-            builder.append(((NBTTagInt) tag).data);
+            builder.append(((NBTTagInt) tag).d());
         } else if ( tag instanceof NBTTagLong ) {
-            builder.append(((NBTTagLong) tag).data);
+            builder.append(((NBTTagLong) tag).c());
             builder.append("L");
         } else if ( tag instanceof NBTTagFloat ) {
-            builder.append(((NBTTagFloat) tag).data);
+            builder.append(((NBTTagFloat) tag).h());
             builder.append("f");
         } else if ( tag instanceof NBTTagDouble ) {
-            String data = String.valueOf(((NBTTagDouble) tag).data);
+            String data = String.valueOf(((NBTTagDouble) tag).g());
             if ( !data.contains(".") ) {
                 data = data.concat(".0");
             }
             builder.append(data);
         } else if ( tag instanceof NBTTagByteArray ) {
             builder.append("<");
-            final byte data[] = ((NBTTagByteArray) tag).data;
+            final byte data[] = ((NBTTagByteArray) tag).c();
             builder.append(data.length);
             builder.append("|");
             for ( int i = 0; i < data.length; i++ ) {
@@ -105,7 +105,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
             builder.append(">");
         } else if ( tag instanceof NBTTagIntArray ) {
             builder.append(">");
-            final int data[] = ((NBTTagIntArray) tag).data;
+            final int data[] = ((NBTTagIntArray) tag).c();
             builder.append(data.length);
             builder.append("|");
             for ( int i = 0; i < data.length; i++ ) {
@@ -117,11 +117,11 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
             builder.append("<");
         } else if ( tag instanceof NBTTagString ) {
             builder.append("\"");
-            builder.append(((NBTTagString) tag).data.replace("\\", "\\\\").replace("\"", "\\\""));
+            builder.append(((NBTTagString) tag).a_().replace("\\", "\\\\").replace("\"", "\\\""));
             builder.append("\"");
         } else if ( tag instanceof NBTTagList ) {
             builder.append("[");
-            final Field field = tag.getClass().getDeclaredField("list");
+            final Field field = tag.getClass().getDeclaredField("b");
             field.setAccessible(true);
             @SuppressWarnings("unchecked")
             final List<NBTBase> data = (List<NBTBase>) field.get(tag);
@@ -136,7 +136,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
             builder.append("]");
         } else if ( tag instanceof NBTTagCompound ) {
             builder.append("{");
-            final Field field = tag.getClass().getDeclaredField("map");
+            final Field field = tag.getClass().getDeclaredField("c");
             field.setAccessible(true);
             @SuppressWarnings("unchecked")
             final Map<String, NBTBase> data = (Map<String, NBTBase>) field.get(tag);
@@ -171,19 +171,19 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
         if ( !value.equals("") ) {
             switch ( c ) {
                 case 'b':
-                    return new NBTTagByte(null, Byte.parseByte(value));
+                    return new NBTTagByte(Byte.parseByte(value));
                 case 's':
-                    return new NBTTagShort(null, Short.parseShort(value));
+                    return new NBTTagShort(Short.parseShort(value));
                 case 'L':
-                    return new NBTTagLong(null, Long.parseLong(value));
+                    return new NBTTagLong(Long.parseLong(value));
                 case 'f':
-                    return new NBTTagFloat(null, Float.parseFloat(value));
+                    return new NBTTagFloat(Float.parseFloat(value));
                 default:
                     data.offset--;
                     if ( value.contains(".") ) {
-                        return new NBTTagDouble(null, Double.parseDouble(value));
+                        return new NBTTagDouble(Double.parseDouble(value));
                     } else {
-                        return new NBTTagInt(null, Integer.parseInt(value));
+                        return new NBTTagInt(Integer.parseInt(value));
                     }
             }
         } else if ( c == '<' ) {
@@ -201,7 +201,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
                 }
                 bytes[i] = Byte.parseByte(value);
             }
-            return new NBTTagByteArray(null, bytes);
+            return new NBTTagByteArray( bytes);
         } else if ( c == '>' ) {
             c = data.readChar();
             while ( c != '|' ) {
@@ -217,7 +217,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
                 }
                 ints[i] = Integer.parseInt(value);
             }
-            return new NBTTagIntArray(null, ints);
+            return new NBTTagIntArray(ints);
         } else if ( c == '[' ) {
             final NBTTagList tag = new NBTTagList();
             data.readWhitespace();
@@ -256,21 +256,12 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> data = new HashMap<String, Object>();
-        final int typeId = getTypeId();
+        final Material type = getType();
         final int damage = getDurability();
         final int amount = getAmount();
         final Map<Enchantment, Integer> enchantments = getEnchantments();
-        if ( typeId != Material.AIR.getId() ) {
-            for ( final Material mat : Material.values() ) {
-                if ( mat.getId() == getTypeId() ) {
-                    data.put("type", mat.name());
-                    break;
-                }
-            }
-            if ( !data.containsKey("type") || ((String) data.get("type")).matches("X[0-9]+") ) {
-                data.remove("type");
-                data.put("id", typeId);
-            }
+        if ( type != Material.AIR ) {
+            data.put("name", type.name());
         }
         if ( damage != 0 ) {
             data.put("damage", damage);
@@ -311,7 +302,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
             stack.setType(Material.getMaterial((String) args.get("type")));
         }
         if ( args.containsKey("id") ) {
-            stack.setTypeId((int) args.get("id"));
+            stack.setType(Material.getMaterial((String) args.get("name")));
         }
         if ( args.containsKey("damage") ) {
             stack.setDurability((short) (int) args.get("damage"));
@@ -336,6 +327,7 @@ public class ItemDeserializer extends ItemStack implements ConfigurationSerializ
                 if ( enchantment.containsKey("id") ) {
                     final Integer id = (Integer) enchantment.get("id");
                     if ( id != null ) {
+                        @SuppressWarnings("deprecation")
                         final Enchantment e = Enchantment.getById(id);
                         if ( e != null ) {
                             ench = e;

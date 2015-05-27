@@ -76,9 +76,9 @@ public class StartingInventory {
         boots = config.getItemStack(prefix.concat(".Armor.Boots"));
         inventory = new LinkedList<ItemStack>();
         boolean addDefaults = true;
-        for ( String key : config.getKeys(true) ) {
+        for ( final String key : config.getKeys(true) ) {
             if ( key.matches(prefix.replace(".", "\\.").concat("\\.Items\\..*")) ) {
-                ItemStack stack = config.getItemStack(key);
+                final ItemStack stack = config.getItemStack(key);
                 if ( stack != null ) {
                     inventory.add(stack);
                     addDefaults = false;

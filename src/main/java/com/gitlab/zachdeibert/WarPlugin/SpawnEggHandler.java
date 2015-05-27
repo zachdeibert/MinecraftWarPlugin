@@ -30,10 +30,11 @@ public class SpawnEggHandler extends ShapedRecipe {
         SnowGolem(97, Material.SNOW_BLOCK),
         Ocelot(98, Material.RAW_FISH),
         IronGolem(99, Material.IRON_BLOCK),
-        Villager(120, Material.EXP_BOTTLE);
+        Villager(120, Material.EMERALD);
         
         public final short id;
-        public Material mainDrop;
+        public final Material mainDrop;
+        
         MobIds(final int id, final Material mainDrop) {
             this.id = (short) id;
             this.mainDrop = mainDrop;

@@ -20,7 +20,7 @@ public class SpawnSphere extends SynchronizedRunnable {
     private int y;
     private int z;
     private int radius;
-    private int typeId;
+    private String type;
     private int timeout;
     private boolean displayMessage;
     private boolean running;
@@ -31,7 +31,7 @@ public class SpawnSphere extends SynchronizedRunnable {
         }
         for ( final Location loc : sphereBlocks ) {
             final Block block = world.getBlockAt(loc);
-            block.setTypeId(typeId);
+            block.setType(Material.getMaterial(type));
         }
     }
     
@@ -97,19 +97,18 @@ public class SpawnSphere extends SynchronizedRunnable {
     public void setRadius(final int radius) {
         this.radius = radius;
         regenerateBlocksArray();
-        
     }
     
-    public void setType(final int typeId) {
-        this.typeId = typeId;
+    public void setType(final String type) {
+        this.type = type;
     }
     
     public void setType(final Block type) {
-        setType(type.getTypeId());
+        setType(type.getType().name());
     }
     
     public void setType(final ItemStack type) {
-        setType(type.getTypeId());
+        setType(type.getType().name());
     }
     
     public void setTimeout(final int ticks) {

@@ -80,8 +80,17 @@ public class WarPlugin extends JavaPlugin {
                         }
                     }
                 } else if ( name.equalsIgnoreCase("giveStartingInventory") ) {
-                    final Player player = getServer().getPlayer(args[0]);
-                    inv.giveTo(player);
+                    boolean found = false;
+                    for ( final Player player : getServer().getOnlinePlayers() ) {
+                        if ( player.getName().equals(args[0]) ) {
+                            inv.giveTo(player);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if ( !found ) {
+                        sender.sendMessage("Unable to find player.");
+                    }
                 } else {
                     return false;
                 }

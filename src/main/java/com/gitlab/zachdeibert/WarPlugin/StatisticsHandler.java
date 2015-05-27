@@ -14,7 +14,7 @@ public class StatisticsHandler implements Listener {
     private File databaseFile;
     private YamlConfiguration database;
     
-    public void load(File dir) throws IOException {
+    public void load(final File dir) throws IOException {
         try {
             if ( !dir.exists() ) {
                 dir.mkdirs();
@@ -25,7 +25,7 @@ public class StatisticsHandler implements Listener {
             }
             database = new YamlConfiguration();
             database.load(databaseFile);
-        } catch ( InvalidConfigurationException ex ) {
+        } catch ( final InvalidConfigurationException ex ) {
             throw new IOException(ex);
         }
     }

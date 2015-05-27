@@ -14,7 +14,7 @@ public class ArrayStream {
         }
     }
     
-    public ArrayStream(char data[]) {
+    public ArrayStream(final char data[]) {
         this.data = data;
     }
 }
