@@ -9,5 +9,7 @@ repositories {
 
 dependencies {
     compile "org.bukkit:bukkit:1.7.9-R0.2"
-    compile "org.bukkit:minecraft-server:1.7.10"
 }
+
+jar.exclude "net/minecraft"
+jar.exclude "org/bukkit"

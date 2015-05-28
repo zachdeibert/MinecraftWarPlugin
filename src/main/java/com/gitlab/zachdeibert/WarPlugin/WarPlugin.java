@@ -36,6 +36,7 @@ public class WarPlugin extends JavaPlugin {
                     if ( (state & WAR_IS_STARTING) == 0 ) {
                         sender.sendMessage("Beginning war setup.");
                         war = new WarStarter(this, getServer().getScheduler(), inv, tper, getConfig().getInt("War.Start.Countdown.Seconds"));
+                        sphere.generate();
                         freezer.enable();
                         state |= WAR_IS_STARTING | PLAYERS_ARE_FROZEN;
                     } else {
