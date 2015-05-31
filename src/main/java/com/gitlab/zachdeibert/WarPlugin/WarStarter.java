@@ -1,5 +1,6 @@
 package com.gitlab.zachdeibert.WarPlugin;
 
+import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -7,15 +8,13 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 public class WarStarter extends SynchronizedRunnable {
     private enum State {
-        TPING,
-        COUNTDOWN,
-        STARTING
+        TPING, COUNTDOWN, STARTING
     }
-
-    private final StartingInventory inv;
+    
     private final SpawnTeleporter tper;
-    private State state;
-    private int count;
+    private State                 state;
+    private int                   count;
+    private Consumer<Player>      onStart;
     
     @Override
     public void run() {
@@ -36,20 +35,23 @@ public class WarStarter extends SynchronizedRunnable {
             case STARTING:
                 Util.broadcastMessage("Go!");
                 for ( final Player player : Bukkit.getOnlinePlayers() ) {
-                    inv.giveTo(player);
+                    onStart.accept(player);
                 }
                 break;
         }
+    }
+    
+    public void load(final Consumer<Player> onStart) {
+        this.onStart = onStart;
     }
     
     public void start() {
         state = State.COUNTDOWN;
     }
     
-    public WarStarter(final Plugin plugin, final BukkitScheduler scheduler, final StartingInventory inv, final SpawnTeleporter tper, final int count) {
+    public WarStarter(final Plugin plugin, final BukkitScheduler scheduler, final SpawnTeleporter tper, final int count) {
         super(plugin, scheduler, 40);
         this.count = count;
-        this.inv = inv;
         this.tper = tper;
         state = State.TPING;
         tper.clearArea();

@@ -14,19 +14,20 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class WarPlugin extends JavaPlugin {
-    private static final byte IS_LOADED  = 1;
-    private static final byte IS_ENABLED = 2;
-    private static final byte WAR_IS_STARTING = 4;
-    private static final byte PLAYERS_ARE_FROZEN = 8;
-    private byte state;
-    private final PlayerFreezer freezer = new PlayerFreezer();
-    private WarStarter war;
-    private WarEnder ender;
-    private StartingInventory inv;
-    private SpawnTeleporter tper;
-    private Healer healer;
-    private SpawnSphere sphere;
-
+    private static final byte   IS_LOADED          = 1;
+    private static final byte   IS_ENABLED         = 2;
+    private static final byte   WAR_IS_STARTING    = 4;
+    private static final byte   PLAYERS_ARE_FROZEN = 8;
+    private byte                state;
+    private final PlayerFreezer freezer            = new PlayerFreezer();
+    private WarStarter          war;
+    private WarEnder            ender;
+    private StartingInventory   inv;
+    private SpawnTeleporter     tper;
+    private Healer              healer;
+    private SpawnSphere         sphere;
+    private StatisticsHandler   stats;
+    
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         if ( (state & IS_ENABLED) != 0 ) {
@@ -35,7 +36,15 @@ public class WarPlugin extends JavaPlugin {
                 if ( name.equalsIgnoreCase("startWar") ) {
                     if ( (state & WAR_IS_STARTING) == 0 ) {
                         sender.sendMessage("Beginning war setup.");
-                        war = new WarStarter(this, getServer().getScheduler(), inv, tper, getConfig().getInt("War.Start.Countdown.Seconds"));
+                        war = new WarStarter(this, getServer().getScheduler(), tper, getConfig().getInt("War.Start.Countdown.Seconds"));
+                        war.load((final Player player) -> {
+                            try {
+                                inv.giveTo(player);
+                                stats.setDeaths(player, 0);
+                            } catch ( final Exception ex ) {
+                                ex.printStackTrace();
+                            }
+                        });
                         sphere.generate();
                         freezer.enable();
                         state |= WAR_IS_STARTING | PLAYERS_ARE_FROZEN;
@@ -109,14 +118,14 @@ public class WarPlugin extends JavaPlugin {
         }
         return false;
     }
-
+    
     @Override
     public void onDisable() {
         state ^= IS_ENABLED;
         final File dataFolder = getDataFolder();
         ender.save(dataFolder);
     }
-
+    
     @Override
     public void onEnable() {
         try {
@@ -144,8 +153,17 @@ public class WarPlugin extends JavaPlugin {
             sphere.load(config, "War.Spawn.Sphere");
             ender = new WarEnder(server);
             ender.load(config, "War.Winning", dataFolder);
-            final StatisticsHandler stats = new StatisticsHandler();
-            stats.load(dataFolder);
+            stats = new StatisticsHandler();
+            stats.load(dataFolder, (final Player player) -> {
+                try {
+                    if ( ender.warStarted ) {
+                        inv.giveTo(player);
+                        stats.setDeaths(player, 0);
+                    }
+                } catch ( final Exception ex ) {
+                    ex.printStackTrace();
+                }
+            });
             SpawnEggHandler.setup(server, config, "Monsters.Eggs");
             ExpHandler.setup(server, config, "Exp");
             final DeathHandler deaths = new DeathHandler();
@@ -167,7 +185,7 @@ public class WarPlugin extends JavaPlugin {
             state |= IS_ENABLED;
         }
     }
-
+    
     @Override
     public void onLoad() {
         state |= IS_LOADED;
