@@ -63,7 +63,6 @@ public class SpawnSphere extends SynchronizedRunnable {
             }
             blocks.add(new Location(world, x + radius - 1, y, z));
             blocks.add(new Location(world, x - radius + 1, y, z));
-            blocks.add(new Location(world, x, y + radius - 1, z));
             blocks.add(new Location(world, x, y - radius + 1, z));
             blocks.add(new Location(world, x, y, z + radius - 1));
             blocks.add(new Location(world, x, y, z - radius + 1));
